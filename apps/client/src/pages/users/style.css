@@ -1,0 +1,16 @@
+.avatar-border {
+  padding: 7px;
+  width: 140px;
+  margin: 0px auto 1.25rem;
+  display: flex;
+  justify-content: center;
+  border-radius: 50%;
+  background: conic-gradient(
+    from -35.18deg at 50% 50%,
+    rgb(0, 108, 207) -154.36deg,
+    rgb(255, 82, 82) 24.13deg,
+    rgb(255, 177, 85) 118.76deg,
+    rgb(0, 108, 207) 205.64deg,
+    rgb(255, 82, 82) 384.13deg
+  );
+}

@@ -1,0 +1,15 @@
+.ant-table-thead tr th:last-child {
+  text-align: end;
+}
+
+.ant-table-tbody tr td:last-child {
+  text-align: end;
+}
+
+.hoverable:hover {
+  background-color: #f0f0f0;
+}
+
+.react-pdf__Page__textContent {
+  /* color: #000 !important; */
+}
