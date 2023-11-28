@@ -3,12 +3,21 @@ import { RecentlyLearnVideo } from 'src/modules/recently-learn-videos/entities/r
 import { Topic } from 'src/modules/topics/entities/topic.entity';
 import { VideoLike } from 'src/modules/video-likes/entities/video-like.entity';
 import { VideoRating } from 'src/modules/video-ratings/entities/video-rating.entity';
-import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+  Index,
+} from 'typeorm';
 
 @Entity({
   name: 'topic_videos',
 })
+@Index('index_title', ['title'])
 export class TopicVideo extends BaseEntity {
+  @Index({ fulltext: true })
   @Column()
   title: string;
 
@@ -47,6 +56,9 @@ export class TopicVideo extends BaseEntity {
   totalRatings: number;
   totalLikes: number;
 
-  @OneToMany(() => RecentlyLearnVideo, (recentlyLearnVideo) => recentlyLearnVideo.topicVideo)
+  @OneToMany(
+    () => RecentlyLearnVideo,
+    (recentlyLearnVideo) => recentlyLearnVideo.topicVideo,
+  )
   recentlyLearnVideos: RecentlyLearnVideo[];
 }

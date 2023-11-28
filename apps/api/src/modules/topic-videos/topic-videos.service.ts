@@ -20,7 +20,8 @@ export class TopicVideosService extends BaseService<
   }
 
   async findAllBy(params: any) {
-    const { where, order } = await this.utilsService.parseParams<TopicVideo>(params);
+    const { where, order } =
+      await this.utilsService.parseParams<TopicVideo>(params);
     const videos = await this.topicVideoRepository.find({
       where: where,
       order,
@@ -41,7 +42,10 @@ export class TopicVideosService extends BaseService<
     if (video.videoRatings === undefined || video.videoRatings.length === 0) {
       video.totalRatings = 0;
     } else {
-      const totalScore = video.videoRatings.reduce((sum, rating) => sum + rating.rating, 0);
+      const totalScore = video.videoRatings.reduce(
+        (sum, rating) => sum + rating.rating,
+        0,
+      );
       const averageScore = totalScore / video.videoRatings.length;
       video.totalRatings = averageScore;
     }
@@ -101,5 +105,18 @@ export class TopicVideosService extends BaseService<
     }
     const videos: TopicVideo[] = await this.topicVideoRepository.query(query);
     return videos;
+  }
+
+  async fullTextSearch(params: any): Promise<any> {
+    const { title, isActive } = params;
+    const active = isActive == 'true' ? 1 : 0;
+    console.log(active, isActive);
+    return this.topicVideoRepository
+      .createQueryBuilder('topic_videos')
+      .where('MATCH(topic_videos.title) AGAINST(:title IN BOOLEAN MODE)', {
+        title: `*${title}*`,
+      })
+      .andWhere(`is_active=${active}`)
+      .getMany();
   }
 }

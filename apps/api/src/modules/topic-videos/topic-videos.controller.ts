@@ -50,9 +50,18 @@ export class TopicVideosController {
     private readonly utilsService: UtilsService,
   ) {}
 
+  @ApiOperation({ summary: 'Full text search to find topic videos' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @Get('search')
+  async fullTextSearch(@Query() params: any) {
+    const data = await this.topicVideosService.fullTextSearch(params);
+    return data;
+  }
+
+  @ApiOperation({ summary: 'To find top pick for user by view sand likes' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
   @Get('top-pick')
   async topPickForYou(@Query() params: any) {
-    console.log('top-pick');
     const data = await this.topicVideosService.topPickForYou(params);
     return data;
   }
@@ -68,6 +77,8 @@ export class TopicVideosController {
     return this.topicVideosService.create(createTopicVideoDto);
   }
 
+  @ApiOperation({ summary: 'Find all topic videos by query params' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
   @Get()
   async findAll(@Query() params: any, @Res() res: Response) {
     const { data, count } =
@@ -76,11 +87,15 @@ export class TopicVideosController {
     res.status(HttpStatus.OK).json(data);
   }
 
+  @ApiOperation({ summary: 'Find topic video by id' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
   @Get(':id')
   findOne(@Param('id') id: string, @Query() params: any) {
     return this.topicVideosService.findOneByParams(+id, params);
   }
 
+  @ApiOperation({ summary: 'Update topic video by id' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
   @Patch(':id')
   update(
     @Param('id') id: string,

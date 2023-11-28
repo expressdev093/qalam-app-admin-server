@@ -13,7 +13,12 @@ import {
 import { UserQuizService } from './user-quiz.service';
 import { CreateUserQuizDto } from './dto/create-user-quiz.dto';
 import { UpdateUserQuizDto } from './dto/update-user-quiz.dto';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Roles } from 'src/common';
 import { Role } from '../users/enum/role.enum';
 import { UserQuiz } from './entities/user-quiz.entity';
@@ -26,6 +31,14 @@ import { Response } from 'express';
 export class UserQuizController {
   constructor(private readonly userQuizService: UserQuizService) {}
 
+  @ApiOperation({ summary: 'Get user quiz analysis' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @Roles(Role.User)
+  @Get('analysis')
+  quizAnalysis(@Query('userId') userId: number) {
+    return this.userQuizService.quizAnalysis(userId);
+  }
+
   @ApiOperation({ summary: 'Create new user quiz' })
   @ApiResponse({ status: 403, description: 'Forbidden.', type: UserQuiz })
   @Roles(Role.User)
@@ -36,7 +49,8 @@ export class UserQuizController {
 
   @Get()
   async findAll(@Query() params: any, @Res() res: Response) {
-    const { data, count } = await this.userQuizService.findAllByAndCount(params);
+    const { data, count } =
+      await this.userQuizService.findAllByAndCount(params);
     res.setHeader('x-total-count', count.toString()); // Update the header value with the actual count
     res.status(HttpStatus.OK).json(data);
   }
@@ -47,7 +61,10 @@ export class UserQuizController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserQuizDto: UpdateUserQuizDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateUserQuizDto: UpdateUserQuizDto,
+  ) {
     return this.userQuizService.update(+id, updateUserQuizDto);
   }
 
